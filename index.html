@@ -3,322 +3,483 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>30岁 MBA 毕业生的抉择：读博的深度博弈分析</title>
+  <title>MBA 毕业生战略决策分析矩阵：学术深造 vs 职业实战</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            deep: { 900: '#0a1628', 800: '#0f2140', 700: '#142c54', 600: '#1a3a6e' },
-            ivory: { 50: '#fefdf8', 100: '#fdfbe8', 200: '#f5f0d0' },
-            accent: { 400: '#60a5fa', 500: '#3b82f6' },
+            navy: { 950: '#060d1a', 900: '#0a1628', 800: '#0f2140', 700: '#142c54' },
+            slate: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b' },
+            accent: { 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb' },
           },
           fontFamily: {
             serif: ['"Noto Serif SC"', 'serif'],
-            sans: ['Inter', '"Noto Sans SC"', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
           },
         },
       },
     }
   </script>
   <style>
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', 'Noto Serif SC', sans-serif; }
+    html { scroll-behavior: smooth }
+    body { font-family: 'Inter', 'Noto Serif SC', sans-serif }
 
+    /* Scroll fade-in */
     .fade-up {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
+      opacity: 0; transform: translateY(36px);
+      transition: opacity .75s ease, transform .75s ease;
     }
-    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up.visible { opacity: 1; transform: translateY(0) }
 
-    .gradient-text {
-      background: linear-gradient(135deg, #60a5fa, #a78bfa, #f0abfc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    /* Gradient text */
+    .grad {
+      background: linear-gradient(135deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .glow-card {
-      background: rgba(15, 33, 64, 0.6);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(96, 165, 250, 0.15);
-      transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s;
+    /* Glass card */
+    .glass {
+      background: rgba(10, 22, 40, .55);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(96, 165, 250, .12);
+      transition: border-color .35s, box-shadow .35s, transform .35s;
     }
-    .glow-card:hover {
-      border-color: rgba(96, 165, 250, 0.4);
-      box-shadow: 0 0 40px rgba(96, 165, 250, 0.1);
-      transform: translateY(-4px);
+    .glass:hover {
+      border-color: rgba(96, 165, 250, .35);
+      box-shadow: 0 4px 40px rgba(96, 165, 250, .08);
+      transform: translateY(-3px);
     }
 
-    .modal-overlay {
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-    }
-    .modal-overlay.active { opacity: 1; pointer-events: auto; }
-    .modal-overlay .modal-content {
-      transform: scale(0.9) translateY(20px);
-      transition: transform 0.4s ease;
-    }
-    .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
-
-    #particles { position: absolute; inset: 0; z-index: 0; }
-
-    .section-line {
-      width: 60px; height: 3px;
+    /* Section divider line */
+    .div-line {
+      width: 56px; height: 2px;
       background: linear-gradient(90deg, #60a5fa, #a78bfa);
       border-radius: 2px;
     }
 
-    .shimmer-btn { position: relative; overflow: hidden; }
-    .shimmer-btn::after {
-      content: '';
-      position: absolute;
-      top: -50%; left: -60%;
-      width: 40%; height: 200%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-      transform: skewX(-20deg);
-      animation: shimmer 3s infinite;
+    /* Shimmer button */
+    .shimmer { position: relative; overflow: hidden }
+    .shimmer::after {
+      content: ''; position: absolute;
+      top: -50%; left: -60%; width: 40%; height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+      transform: skewX(-20deg); animation: shim 3s infinite;
     }
-    @keyframes shimmer { 0% { left: -60%; } 100% { left: 120%; } }
+    @keyframes shim { 0%{left:-60%} 100%{left:120%} }
+
+    /* Quiz radio custom */
+    .quiz-opt {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .85rem 1.2rem; border-radius: .75rem;
+      border: 1px solid rgba(96,165,250,.12);
+      background: rgba(10,22,40,.4);
+      cursor: pointer; transition: all .25s;
+    }
+    .quiz-opt:hover { border-color: rgba(96,165,250,.35); background: rgba(15,33,64,.6) }
+    .quiz-opt.selected { border-color: #60a5fa; background: rgba(96,165,250,.1) }
+    .quiz-opt input { display: none }
+    .quiz-dot {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid rgba(96,165,250,.4);
+      flex-shrink: 0; position: relative; transition: border-color .25s;
+    }
+    .quiz-opt.selected .quiz-dot { border-color: #60a5fa }
+    .quiz-opt.selected .quiz-dot::after {
+      content: ''; position: absolute;
+      top: 3px; left: 3px; width: 8px; height: 8px;
+      border-radius: 50%; background: #60a5fa;
+    }
+
+    /* Result panel */
+    .result-panel {
+      max-height: 0; overflow: hidden;
+      transition: max-height .6s ease, opacity .5s ease, padding .5s ease;
+      opacity: 0;
+    }
+    .result-panel.show {
+      max-height: 400px; opacity: 1;
+    }
+
+    /* Image overlay */
+    .img-overlay {
+      position: relative; overflow: hidden;
+    }
+    .img-overlay::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(10,22,40,.85));
+    }
+    .img-overlay img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .6s ease;
+    }
+    .img-overlay:hover img { transform: scale(1.04) }
   </style>
 </head>
-<body class="bg-deep-900 text-ivory-50 antialiased">
+<body class="bg-navy-950 text-slate-50 antialiased">
 
-  <!-- ========== HERO ========== -->
-  <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
-    <canvas id="particles"></canvas>
-    <div class="absolute inset-0 bg-gradient-to-b from-deep-900/30 via-deep-800/50 to-deep-900 z-[1]"></div>
-
-    <div class="relative z-10 text-center px-6 max-w-3xl mx-auto">
-      <div class="fade-up inline-block mb-6 px-4 py-1.5 rounded-full border border-accent-400/30 bg-accent-400/10 text-accent-400 text-sm font-sans tracking-wider">
-        30 岁 &middot; 十字路口 &middot; 深度博弈
-      </div>
-      <h1 class="fade-up font-serif text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6">
-        <span class="gradient-text">人生是复利的博弈</span>
-      </h1>
-      <p class="fade-up text-lg sm:text-xl text-ivory-50/70 leading-relaxed max-w-xl mx-auto mb-10 font-light">
-        站在 30 岁的十字路口，理性拆解读博的机会成本与长期价值。
-      </p>
-      <a href="#pros" class="fade-up inline-block px-8 py-3 rounded-full bg-accent-500 hover:bg-accent-400 text-white font-semibold transition-colors shimmer-btn">
-        开始阅读 &darr;
-      </a>
-    </div>
-
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce text-ivory-50/40 text-2xl">&ang;</div>
-  </section>
-
-  <!-- ========== 利：资本的二次升值 ========== -->
-  <section id="pros" class="py-20 sm:py-28 px-6">
-    <div class="max-w-5xl mx-auto">
-      <div class="text-center mb-16">
-        <div class="fade-up section-line mx-auto mb-4"></div>
-        <h2 class="fade-up font-serif text-3xl sm:text-4xl font-bold mb-3">
-          利：<span class="text-accent-400">资本的二次升值</span>
-        </h2>
-        <p class="fade-up text-ivory-50/50 max-w-lg mx-auto">博士学位不仅是学术标签，更是人生资本的战略级杠杆。</p>
-      </div>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="fade-up glow-card rounded-2xl p-8">
-          <div class="text-4xl mb-5">&#127891;</div>
-          <h3 class="font-serif text-xl font-bold mb-3 text-accent-400">教职的"准入证"</h3>
-          <p class="text-ivory-50/65 leading-relaxed text-sm">
-            在国内双一流高校，博士学位是进入教职体系的硬性门槛。MBA 提供了商业视野，而博士学历则打开学术大门——这是从"业界人"到"学者"身份转换的唯一通道。没有这张入场券，再丰富的实践经验也只能停留在"客座"与"兼职"的层面。
-          </p>
-        </div>
-        <div class="fade-up glow-card rounded-2xl p-8">
-          <div class="text-4xl mb-5">&#127986;</div>
-          <h3 class="font-serif text-xl font-bold mb-3 text-accent-400">社会地位的"护城河"</h3>
-          <p class="text-ivory-50/65 leading-relaxed text-sm">
-            在中国社会语境中，"博士"头衔自带信任溢价。它意味着系统性思维能力和学术严谨性。在政策咨询、智库研究、企业独立董事等高影响力场景中，博士身份构成了一道难以被替代的护城河——这是 MBA 难以单独提供的社会资本。
-          </p>
-        </div>
-        <div class="fade-up glow-card rounded-2xl p-8">
-          <div class="text-4xl mb-5">&#128161;</div>
-          <h3 class="font-serif text-xl font-bold mb-3 text-accent-400">思维的重塑</h3>
-          <p class="text-ivory-50/65 leading-relaxed text-sm">
-            MBA 训练的是"怎么做"，博士训练的是"为什么"。从管理实践向管理理论的跨越，意味着从经验驱动升级为理论驱动。这种思维范式的重塑，让你不仅能解决眼前的商业问题，更能发现新规律、构建新框架、影响下一代管理者。
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== 弊：时间的沉没成本 ========== -->
-  <section class="py-20 sm:py-28 px-6 bg-deep-800/40">
-    <div class="max-w-5xl mx-auto">
-      <div class="text-center mb-16">
-        <div class="fade-up section-line mx-auto mb-4"></div>
-        <h2 class="fade-up font-serif text-3xl sm:text-4xl font-bold mb-3">
-          弊：<span class="text-red-400">时间的沉没成本</span>
-        </h2>
-        <p class="fade-up text-ivory-50/50 max-w-lg mx-auto">每一枚硬币都有反面。读博的代价，同样需要被严肃计算。</p>
-      </div>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="fade-up glow-card rounded-2xl p-8">
-          <div class="text-4xl mb-5">&#9203;</div>
-          <h3 class="font-serif text-xl font-bold mb-3 text-red-400">黄金就业期的流失</h3>
-          <p class="text-ivory-50/65 leading-relaxed text-sm">
-            MBA 毕业后的 3-5 年是职业加速的黄金窗口。同龄人可能正在完成从经理到总监、从总监到 VP 的跃迁。而当你选择读博的 4-5 年里，失去的不仅是薪资的复利增长，更是在行业上升周期中积累的实战资历与人脉网络。
-          </p>
-        </div>
-        <div class="fade-up glow-card rounded-2xl p-8">
-          <div class="text-4xl mb-5">&#128308;</div>
-          <h3 class="font-serif text-xl font-bold mb-3 text-red-400">科研冷板凳的孤独</h3>
-          <p class="text-ivory-50/65 leading-relaxed text-sm">
-            博士生涯是一场漫长的孤独修行。从选题、文献、方法论、数据收集到论文发表，每一个环节都需要极度的专注与耐性。与 MBA 课堂的热闹互动不同，科研的本质是一个人与一个问题之间的长期对峙。你是否准备好了面对这种心理上的巨大落差？
-          </p>
-        </div>
-        <div class="fade-up glow-card rounded-2xl p-8">
-          <div class="text-4xl mb-5">&#128268;</div>
-          <h3 class="font-serif text-xl font-bold mb-3 text-red-400">与实践脱节的风险</h3>
-          <p class="text-ivory-50/65 leading-relaxed text-sm">
-            学术界的节奏与商界的节奏存在本质差异。当你沉浸于理论模型与学术期刊的审稿周期时，外面的商业世界正在以指数速度迭代。AI、区块链、新商业模式……几年的"学术闭关"后重返业界，你可能发现自己曾经敏锐的商业嗅觉已经钝化。
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== MBA 特别视角：DBA vs Ph.D ========== -->
-  <section class="py-20 sm:py-28 px-6">
-    <div class="max-w-4xl mx-auto">
-      <div class="text-center mb-16">
-        <div class="fade-up section-line mx-auto mb-4"></div>
-        <h2 class="fade-up font-serif text-3xl sm:text-4xl font-bold mb-3">
-          MBA 特别视角：<span class="text-purple-400">DBA 还是 Ph.D？</span>
-        </h2>
-        <p class="fade-up text-ivory-50/50 max-w-lg mx-auto">对于 MBA 毕业生来说，读博不是"是否"的问题，而是"哪条路"的问题。</p>
-      </div>
-
-      <div class="fade-up overflow-hidden rounded-2xl border border-accent-400/15">
-        <table class="w-full text-sm sm:text-base">
-          <thead>
-            <tr class="bg-deep-800/80">
-              <th class="p-4 sm:p-5 text-left text-ivory-50/40 font-sans font-semibold">维度</th>
-              <th class="p-4 sm:p-5 text-center text-accent-400 font-sans font-semibold">DBA（工商管理博士）</th>
-              <th class="p-4 sm:p-5 text-center text-purple-400 font-sans font-semibold">Ph.D（管理学博士）</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-t border-accent-400/10 bg-deep-800/20">
-              <td class="p-4 sm:p-5 font-medium">定位</td>
-              <td class="p-4 sm:p-5 text-center text-ivory-50/65">实践导向，解决真实商业问题</td>
-              <td class="p-4 sm:p-5 text-center text-ivory-50/65">理论导向，推动学科前沿</td>
-            </tr>
-            <tr class="border-t border-accent-400/10">
-              <td class="p-4 sm:p-5 font-medium">学制</td>
-              <td class="p-4 sm:p-5 text-center text-ivory-50/65">3-4 年，可在职</td>
-              <td class="p-4 sm:p-5 text-center text-ivory-50/65">4-6 年，通常全日制</td>
-            </tr>
-            <tr class="border-t border-accent-400/10 bg-deep-800/20">
-              <td class="p-4 sm:p-5 font-medium">适合人群</td>
-              <td class="p-4 sm:p-5 text-center text-ivory-50/65">想带着行业问题深造的从业者</td>
-              <td class="p-4 sm:p-5 text-center text-ivory-50/65">想进入学术圈做研究的人</td>
-            </tr>
-            <tr class="border-t border-accent-400/10">
-              <td class="p-4 sm:p-5 font-medium">毕业出路</td>
-              <td class="p-4 sm:p-5 text-center text-ivory-50/65">企业高管、咨询、兼职教授</td>
-              <td class="p-4 sm:p-5 text-center text-ivory-50/65">高校教职、科研机构、智库</td>
-            </tr>
-            <tr class="border-t border-accent-400/10 bg-deep-800/20">
-              <td class="p-4 sm:p-5 font-medium">机会成本</td>
-              <td class="p-4 sm:p-5 text-center text-ivory-50/65">较低（保留职业轨道）</td>
-              <td class="p-4 sm:p-5 text-center text-ivory-50/65">较高（暂停职业生涯）</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="fade-up mt-10 glow-card rounded-2xl p-8 sm:p-10 border-l-4 border-l-purple-400">
-        <h3 class="font-serif text-lg font-bold mb-3 text-purple-400">核心建议：带着问题去研究</h3>
-        <p class="text-ivory-50/65 leading-relaxed">
-          MBA 毕业生最大的优势，是你已经见过真实的商业世界。你不是为了"获得知识"而读博，而是为了"解答问题"而读博。如果你的研究方向来自你在行业中观察到的真实困惑——比如某个战略困境、某个组织悖论、某个市场异象——那么无论选择 DBA 还是 Ph.D，这段博士旅程都将是一次有方向感的价值投资，而非盲目的时间消耗。
-        </p>
-        <p class="text-ivory-50/65 leading-relaxed mt-4">
-          <strong class="text-ivory-50">关键判断标准：</strong>你是否已经找到了那个值得用 4 年甚至更久去回答的问题？如果答案是肯定的，读博就是正确的选择。如果还没有，也许你应该先回到行业中去，让实践帮你找到方向。
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== 决策计算器（彩蛋） ========== -->
-  <section class="py-20 sm:py-28 px-6 bg-deep-800/40 text-center">
-    <div class="max-w-2xl mx-auto">
-      <div class="fade-up text-5xl mb-6">&#129504;</div>
-      <h2 class="fade-up font-serif text-2xl sm:text-3xl font-bold mb-4">决策计算器</h2>
-      <p class="fade-up text-ivory-50/50 mb-8 max-w-md mx-auto">点击下方按钮，让理性与直觉对话。</p>
-      <button id="calcBtn" class="fade-up inline-block px-10 py-4 rounded-full bg-gradient-to-r from-accent-500 to-purple-500 hover:from-accent-400 hover:to-purple-400 text-white font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-accent-500/25 shimmer-btn">
-        开始计算
-      </button>
-    </div>
-  </section>
-
-  <!-- ========== FOOTER ========== -->
-  <footer class="py-10 px-6 text-center text-ivory-50/30 text-sm border-t border-accent-400/10">
-    <p>献给每一个在人生十字路口认真思考的人</p>
-    <p class="mt-2">30 岁，不是终点，是第二次出发的起点。</p>
-  </footer>
-
-  <!-- ========== MODAL ========== -->
-  <div id="modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center px-6 bg-deep-900/80 backdrop-blur-sm">
-    <div class="modal-content max-w-lg w-full glow-card rounded-2xl p-10 text-center relative">
-      <button id="closeModal" class="absolute top-4 right-5 text-ivory-50/40 hover:text-ivory-50 text-xl transition-colors">&times;</button>
-      <div class="text-5xl mb-6">&#127775;</div>
-      <p class="font-serif text-xl sm:text-2xl leading-relaxed text-ivory-50 font-bold">
-        "在 30 岁，选择没有对错，只有你是否愿意为那个不确定的未来买单。"
-      </p>
-      <p class="mt-6 text-ivory-50/40 text-sm">—— 致每一位勇敢做决定的人</p>
+<!-- ==================== NAV ==================== -->
+<nav class="fixed top-0 w-full z-40 bg-navy-950/80 backdrop-blur-md border-b border-accent-400/10">
+  <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+    <span class="font-serif font-bold text-sm tracking-wider text-accent-400">STRATEGY BRIEF</span>
+    <div class="hidden sm:flex gap-6 text-xs tracking-wide text-slate-400">
+      <a href="#value" class="hover:text-accent-400 transition-colors">价值矩阵</a>
+      <a href="#cost" class="hover:text-accent-400 transition-colors">机会成本</a>
+      <a href="#compare" class="hover:text-accent-400 transition-colors">路径对比</a>
+      <a href="#quiz" class="hover:text-accent-400 transition-colors">决策自测</a>
     </div>
   </div>
+</nav>
 
-  <script>
-    // Fade-in on scroll
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+<!-- ==================== HERO ==================== -->
+<section class="relative min-h-screen flex items-end pb-20 sm:pb-28 overflow-hidden">
+  <div class="absolute inset-0 z-0">
+    <img
+      src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
+      alt="Modern office"
+      class="w-full h-full object-cover"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/80 to-navy-950/40"></div>
+  </div>
 
-    // Particle background
-    (function() {
-      const canvas = document.getElementById('particles');
-      const ctx = canvas.getContext('2d');
-      let w, h, dots = [];
-      function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-      resize();
-      window.addEventListener('resize', resize);
-      for (let i = 0; i < 80; i++) {
-        dots.push({ x: Math.random()*w, y: Math.random()*h, r: Math.random()*1.5+0.5,
-          dx: (Math.random()-0.5)*0.3, dy: (Math.random()-0.5)*0.3, o: Math.random()*0.4+0.1 });
-      }
-      function draw() {
-        ctx.clearRect(0, 0, w, h);
-        dots.forEach(d => {
-          ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI*2);
-          ctx.fillStyle = `rgba(96,165,250,${d.o})`; ctx.fill();
-          d.x += d.dx; d.y += d.dy;
-          if (d.x<0) d.x=w; if (d.x>w) d.x=0; if (d.y<0) d.y=h; if (d.y>h) d.y=0;
-        });
-        for (let i=0; i<dots.length; i++) for (let j=i+1; j<dots.length; j++) {
-          const dx=dots[i].x-dots[j].x, dy=dots[i].y-dots[j].y, dist=Math.sqrt(dx*dx+dy*dy);
-          if (dist<120) { ctx.beginPath(); ctx.moveTo(dots[i].x,dots[i].y); ctx.lineTo(dots[j].x,dots[j].y);
-            ctx.strokeStyle=`rgba(96,165,250,${0.06*(1-dist/120)})`; ctx.lineWidth=0.5; ctx.stroke(); }
-        }
-        requestAnimationFrame(draw);
-      }
-      draw();
-    })();
+  <div class="relative z-10 max-w-4xl mx-auto px-6">
+    <div class="fade-up inline-block mb-5 px-4 py-1.5 rounded-full border border-accent-400/25 bg-accent-400/5 text-accent-400 text-xs font-sans tracking-[.2em] uppercase">
+      Strategy Analysis &middot; MBA Decision Matrix
+    </div>
+    <h1 class="fade-up font-serif text-3xl sm:text-5xl md:text-6xl font-bold leading-tight mb-5">
+      <span class="grad">MBA 毕业生战略决策<br class="hidden sm:block">分析矩阵</span>
+    </h1>
+    <p class="fade-up text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl mb-10 font-light">
+      学术深造 vs 职业实战——以结构化分析框架，拆解每条路径的机会成本、长期回报与适配画像。
+    </p>
+    <a href="#value" class="fade-up inline-flex items-center gap-2 px-7 py-3 rounded-full bg-accent-600 hover:bg-accent-500 text-white text-sm font-semibold transition-colors shimmer">
+      进入分析 <span class="text-lg">&darr;</span>
+    </a>
+  </div>
+</section>
 
-    // Modal
-    const modal = document.getElementById('modal');
-    document.getElementById('calcBtn').addEventListener('click', () => modal.classList.add('active'));
-    document.getElementById('closeModal').addEventListener('click', () => modal.classList.remove('active'));
-    modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
-  </script>
+<!-- ==================== 价值矩阵 ==================== -->
+<section id="value" class="py-20 sm:py-28 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <div class="fade-up div-line mx-auto mb-4"></div>
+      <h2 class="fade-up font-serif text-2xl sm:text-3xl font-bold mb-2">维度 A：学术路径的<span class="text-accent-400">价值矩阵</span></h2>
+      <p class="fade-up text-slate-400 text-sm max-w-lg mx-auto">博士学位作为战略资产，在三个维度上产生可量化的长期溢价。</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="fade-up glass rounded-2xl overflow-hidden">
+        <div class="img-overlay h-44">
+          <img src="https://images.unsplash.com/photo-1524178232363-1fb21075726b?auto=format&fit=crop&w=600&q=80" alt="University lecture hall" />
+        </div>
+        <div class="p-6">
+          <h3 class="font-serif text-lg font-bold mb-2 text-accent-400">教职准入壁垒</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            国内双一流高校教职已全面要求博士学位作为准入门槛。MBA 提供商业洞察，博士学历则是进入学术体系的唯一通道。缺乏这一资质，行业经验仅能支撑"客座"或"兼职"角色，无法获得正式教职的长期稳定性与学术话语权。
+          </p>
+        </div>
+      </div>
+
+      <div class="fade-up glass rounded-2xl overflow-hidden">
+        <div class="img-overlay h-44">
+          <img src="https://images.unsplash.com/photo-1551434678-e07b12011791?auto=format&fit=crop&w=600&q=80" alt="Boardroom strategy" />
+        </div>
+        <div class="p-6">
+          <h3 class="font-serif text-lg font-bold mb-2 text-accent-400">社会资本护城河</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            "博士"头衔在政策咨询、智库研究与企业独立董事等场景中自带信任溢价。它代表系统性研究能力与学术严谨性——这些是 MBA 学位难以单独提供的差异化竞争力。博士身份构建了一道随时间加深的社会护城河。
+          </p>
+        </div>
+      </div>
+
+      <div class="fade-up glass rounded-2xl overflow-hidden">
+        <div class="img-overlay h-44">
+          <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=600&q=80" alt="Research and analysis" />
+        </div>
+        <div class="p-6">
+          <h3 class="font-serif text-lg font-bold mb-2 text-accent-400">思维范式迁移</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            MBA 的核心训练是"如何执行"，博士的核心训练是"为何如此"。从经验驱动转向理论驱动，意味着你不再只是问题的解决者，而是问题的定义者——这种认知范式的迁移，是从管理者到思想领袖的质变。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 机会成本 ==================== -->
+<section id="cost" class="py-20 sm:py-28 px-6 bg-navy-900/40">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <div class="fade-up div-line mx-auto mb-4"></div>
+      <h2 class="fade-up font-serif text-2xl sm:text-3xl font-bold mb-2">维度 B：学术路径的<span class="text-red-400">机会成本</span></h2>
+      <p class="fade-up text-slate-400 text-sm max-w-lg mx-auto">任何战略选择都有隐性代价。以下三个风险因子需要被纳入决策模型。</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="fade-up glass rounded-2xl p-8">
+        <div class="text-xs uppercase tracking-widest text-red-400/60 mb-3 font-semibold">风险因子 01</div>
+        <h3 class="font-serif text-lg font-bold mb-3 text-red-400">职业窗口期折损</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          MBA 毕业后的 3-5 年是职业复利的加速期。选择读博意味着在 4-5 年内暂停薪资增长与职场晋升轨道。当同龄人完成从经理到总监的跃迁时，你的资产积累曲线将出现结构性断点。
+        </p>
+      </div>
+
+      <div class="fade-up glass rounded-2xl p-8">
+        <div class="text-xs uppercase tracking-widest text-red-400/60 mb-3 font-semibold">风险因子 02</div>
+        <h3 class="font-serif text-lg font-bold mb-3 text-red-400">科研周期的心理成本</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          博士研究是一场长期孤独修行。与 MBA 课堂的高频互动不同，科研的本质是个体与问题的持续对峙。从选题到发表，每个环节都要求极高耐性。心理落差是导致博士辍学的核心因素之一，需要在决策前充分评估。
+        </p>
+      </div>
+
+      <div class="fade-up glass rounded-2xl p-8">
+        <div class="text-xs uppercase tracking-widest text-red-400/60 mb-3 font-semibold">风险因子 03</div>
+        <h3 class="font-serif text-lg font-bold mb-3 text-red-400">行业脱钩风险</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          学术周期与商业周期存在结构性错配。在沉浸于理论模型与期刊审稿的数年中，外部商业环境正以指数速度迭代。AI 重塑、新商业模式涌现——"学术闭关"可能导致曾经敏锐的商业嗅觉出现不可逆的钝化。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 路径对比 ==================== -->
+<section id="compare" class="py-20 sm:py-28 px-6">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-16">
+      <div class="fade-up div-line mx-auto mb-4"></div>
+      <h2 class="fade-up font-serif text-2xl sm:text-3xl font-bold mb-2">路径对比：<span class="text-purple-400">DBA vs Ph.D</span></h2>
+      <p class="fade-up text-slate-400 text-sm max-w-lg mx-auto">关键不在于哪条路更好，而在于哪条路与你的战略目标对齐。</p>
+    </div>
+
+    <div class="fade-up overflow-hidden rounded-2xl border border-accent-400/10">
+      <table class="w-full text-sm sm:text-base">
+        <thead>
+          <tr class="bg-navy-900/80">
+            <th class="p-4 sm:p-5 text-left text-slate-400 font-sans font-semibold text-xs uppercase tracking-wider">评估维度</th>
+            <th class="p-4 sm:p-5 text-center text-accent-400 font-sans font-semibold">DBA</th>
+            <th class="p-4 sm:p-5 text-center text-purple-400 font-sans font-semibold">Ph.D</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-t border-accent-400/10 bg-navy-900/20">
+            <td class="p-4 sm:p-5 font-medium">战略定位</td>
+            <td class="p-4 sm:p-5 text-center text-slate-400">实践驱动 &middot; 解决真实商业问题</td>
+            <td class="p-4 sm:p-5 text-center text-slate-400">理论驱动 &middot; 推动学科边界</td>
+          </tr>
+          <tr class="border-t border-accent-400/10">
+            <td class="p-4 sm:p-5 font-medium">时间投入</td>
+            <td class="p-4 sm:p-5 text-center text-slate-400">3-4 年 &middot; 可在职修读</td>
+            <td class="p-4 sm:p-5 text-center text-slate-400">4-6 年 &middot; 通常全日制</td>
+          </tr>
+          <tr class="border-t border-accent-400/10 bg-navy-900/20">
+            <td class="p-4 sm:p-5 font-medium">适配画像</td>
+            <td class="p-4 sm:p-5 text-center text-slate-400">持有行业问题、寻求方法论升级的从业者</td>
+            <td class="p-4 sm:p-5 text-center text-slate-400">志在学术体系、致力于原创研究的研究者</td>
+          </tr>
+          <tr class="border-t border-accent-400/10">
+            <td class="p-4 sm:p-5 font-medium">出口路径</td>
+            <td class="p-4 sm:p-5 text-center text-slate-400">企业高管 &middot; 战略咨询 &middot; 兼职教授</td>
+            <td class="p-4 sm:p-5 text-center text-slate-400">高校教职 &middot; 科研机构 &middot; 政策智库</td>
+          </tr>
+          <tr class="border-t border-accent-400/10 bg-navy-900/20">
+            <td class="p-4 sm:p-5 font-medium">机会成本</td>
+            <td class="p-4 sm:p-5 text-center text-accent-400 font-semibold">可控</td>
+            <td class="p-4 sm:p-5 text-center text-red-400 font-semibold">显著</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="fade-up mt-10 glass rounded-2xl p-8 sm:p-10 border-l-4 border-l-purple-400">
+      <h3 class="font-serif text-base font-bold mb-3 text-purple-400 uppercase tracking-wider text-xs">核心洞察</h3>
+      <p class="text-slate-300 leading-relaxed text-sm">
+        MBA 毕业生的核心竞争优势，在于已经建立了真实的商业认知框架。如果你已观察到某个值得深究的战略困境、组织悖论或市场异象——那么无论选择 DBA 还是 Ph.D，博士研究都将成为一次有方向感的价值投资。
+      </p>
+      <p class="text-slate-300 leading-relaxed text-sm mt-4">
+        <strong class="text-slate-50">决策临界点：</strong>你是否已找到那个值得投入 4+ 年去回答的问题？如果答案为是，学术路径具有正期望值。如果答案尚未清晰，建议先回归行业实践，让真实问题自然浮现。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 决策倾向自测 ==================== -->
+<section id="quiz" class="py-20 sm:py-28 px-6 bg-navy-900/40">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-14">
+      <div class="fade-up div-line mx-auto mb-4"></div>
+      <h2 class="fade-up font-serif text-2xl sm:text-3xl font-bold mb-2">决策倾向<span class="text-accent-400">自测</span></h2>
+      <p class="fade-up text-slate-400 text-sm max-w-md mx-auto">回答以下三个问题，系统将基于你的选择生成倾向性分析。</p>
+    </div>
+
+    <!-- Q1 -->
+    <div class="fade-up mb-10">
+      <h3 class="font-serif text-base sm:text-lg font-bold mb-4 flex gap-3">
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-accent-600/20 text-accent-400 text-xs font-bold flex-shrink-0">1</span>
+        <span>你是否愿意在未来 4-6 年内，接受收入大幅降低甚至归零的状态？</span>
+      </h3>
+      <div class="space-y-3 ml-10">
+        <label class="quiz-opt" data-q="q1" data-v="academic" onclick="selectOpt(this)">
+          <input type="radio" name="q1" value="academic" />
+          <div class="quiz-dot"></div>
+          <span class="text-slate-300 text-sm">愿意。我已有财务规划，可以接受短期牺牲换取长期跃迁。</span>
+        </label>
+        <label class="quiz-opt" data-q="q1" data-v="practice" onclick="selectOpt(this)">
+          <input type="radio" name="q1" value="practice" />
+          <div class="quiz-dot"></div>
+          <span class="text-slate-300 text-sm">不愿意。我需要在未来几年内维持或提升收入水平。</span>
+        </label>
+        <label class="quiz-opt" data-q="q1" data-v="neutral" onclick="selectOpt(this)">
+          <input type="radio" name="q1" value="neutral" />
+          <div class="quiz-dot"></div>
+          <span class="text-slate-300 text-sm">取决于具体项目。在职博士或高奖学金项目我可以接受。</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="fade-up mb-10">
+      <h3 class="font-serif text-base sm:text-lg font-bold mb-4 flex gap-3">
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-accent-600/20 text-accent-400 text-xs font-bold flex-shrink-0">2</span>
+        <span>当你面对一个复杂商业问题时，你的第一反应更接近以下哪种？</span>
+      </h3>
+      <div class="space-y-3 ml-10">
+        <label class="quiz-opt" data-q="q2" data-v="academic" onclick="selectOpt(this)">
+          <input type="radio" name="q2" value="academic" />
+          <div class="quiz-dot"></div>
+          <span class="text-slate-300 text-sm">追问"为什么"——我希望理解底层逻辑，甚至构建理论模型来解释它。</span>
+        </label>
+        <label class="quiz-opt" data-q="q2" data-v="practice" onclick="selectOpt(this)">
+          <input type="radio" name="q2" value="practice" />
+          <div class="quiz-dot"></div>
+          <span class="text-slate-300 text-sm">思考"怎么做"——我更关注如何快速落地解决方案、拿到结果。</span>
+        </label>
+        <label class="quiz-opt" data-q="q2" data-v="neutral" onclick="selectOpt(this)">
+          <input type="radio" name="q2" value="neutral" />
+          <div class="quiz-dot"></div>
+          <span class="text-slate-300 text-sm">两者兼有。我既想理解本质，也不想脱离实际应用场景。</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="fade-up mb-12">
+      <h3 class="font-serif text-base sm:text-lg font-bold mb-4 flex gap-3">
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-accent-600/20 text-accent-400 text-xs font-bold flex-shrink-0">3</span>
+        <span>五年后，你更希望自己的身份标签是什么？</span>
+      </h3>
+      <div class="space-y-3 ml-10">
+        <label class="quiz-opt" data-q="q3" data-v="academic" onclick="selectOpt(this)">
+          <input type="radio" name="q3" value="academic" />
+          <div class="quiz-dot"></div>
+          <span class="text-slate-300 text-sm">学者 / 教授 / 研究员——在学术领域建立个人影响力。</span>
+        </label>
+        <label class="quiz-opt" data-q="q3" data-v="practice" onclick="selectOpt(this)">
+          <input type="radio" name="q3" value="practice" />
+          <div class="quiz-dot"></div>
+          <span class="text-slate-300 text-sm">企业高管 / 创业者 / 行业领袖——在商业世界创造可量化的价值。</span>
+        </label>
+        <label class="quiz-opt" data-q="q3" data-v="neutral" onclick="selectOpt(this)">
+          <input type="radio" name="q3" value="neutral" />
+          <div class="quiz-dot"></div>
+          <span class="text-slate-300 text-sm">跨界角色——既参与学术研究，也保持商业实践，做理论与实践的桥梁。</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="fade-up text-center">
+      <button id="quizSubmit" class="inline-flex items-center gap-2 px-10 py-4 rounded-full bg-gradient-to-r from-accent-600 to-purple-600 hover:from-accent-500 hover:to-purple-500 text-white font-bold text-base transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-accent-500/20 shimmer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100" disabled onclick="calcResult()">
+        生成分析报告
+      </button>
+      <p id="quizHint" class="text-slate-500 text-xs mt-3">请先完成以上全部 3 道题</p>
+    </div>
+
+    <!-- Result -->
+    <div id="quizResult" class="result-panel mt-10 rounded-2xl border border-accent-400/15 bg-navy-900/60 p-8 sm:p-10">
+      <div id="resultIcon" class="text-4xl mb-4"></div>
+      <h3 id="resultTitle" class="font-serif text-xl sm:text-2xl font-bold mb-4"></h3>
+      <p id="resultBody" class="text-slate-300 leading-relaxed text-sm"></p>
+      <p id="resultAdvice" class="text-slate-400 leading-relaxed text-xs mt-4 pt-4 border-t border-accent-400/10"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="py-12 px-6 text-center text-slate-500 text-xs border-t border-accent-400/10">
+  <p class="tracking-wider uppercase text-[10px] mb-2">Strategy Analysis Brief</p>
+  <p>MBA 毕业生战略决策分析矩阵 &middot; 学术深造 vs 职业实战</p>
+  <p class="mt-3 text-slate-600">选择的价值不在于路径本身，而在于决策者是否对选择的代价拥有清醒认知。</p>
+</footer>
+
+<!-- ==================== SCRIPTS ==================== -->
+<script>
+// ---- Scroll fade ----
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+// ---- Quiz logic ----
+const answers = {};
+
+function selectOpt(el) {
+  const name = el.querySelector('input').name;
+  const val = el.querySelector('input').value;
+
+  // Clear siblings
+  el.closest('.space-y-3').querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[name] = val;
+
+  // Enable button when all answered
+  const btn = document.getElementById('quizSubmit');
+  const hint = document.getElementById('quizHint');
+  if (Object.keys(answers).length === 3) {
+    btn.disabled = false;
+    hint.textContent = '已就绪，点击生成分析';
+    hint.classList.remove('text-slate-500');
+    hint.classList.add('text-accent-400');
+  }
+}
+
+function calcResult() {
+  let score = 0;
+  Object.values(answers).forEach(v => {
+    if (v === 'academic') score += 2;
+    else if (v === 'neutral') score += 1;
+  });
+
+  const panel = document.getElementById('quizResult');
+  const icon = document.getElementById('resultIcon');
+  const title = document.getElementById('resultTitle');
+  const body = document.getElementById('resultBody');
+  const advice = document.getElementById('resultAdvice');
+
+  if (score >= 5) {
+    icon.textContent = '🎓';
+    title.innerHTML = '<span class="text-accent-400">学术潜力股</span>';
+    body.textContent = '你的决策特质显示，你更倾向于在理论边界探索。你愿意为长期价值承受短期成本，对"为什么"的追问欲超越了即时回报的诱惑。这种认知模式与学术研究的核心要求高度匹配。';
+    advice.textContent = '建议优先考虑 Ph.D 路径，聚焦你已明确的研究方向。如果尚未锁定具体课题，可先以 Research Assistant 身份进入学术环境试水，验证研究兴趣后再做最终决策。';
+  } else if (score >= 3) {
+    icon.textContent = '⚖️';
+    title.innerHTML = '<span class="text-purple-400">混合型决策者</span>';
+    body.textContent = '你的决策模式兼具学术好奇心与实践导向。你既想理解问题的本质，又不愿完全脱离商业场景。这种"跨界"特质在管理学科中极为宝贵——你可能是 DBA 路径的最佳候选人。';
+    advice.textContent = '建议优先考虑 DBA（工商管理博士）项目。它允许你在保持职业轨道的同时完成学术升级。选择那些与企业实践深度绑定的研究课题，让你的工作经验成为学术产出的燃料。';
+  } else {
+    icon.textContent = '📈';
+    title.innerHTML = '<span class="text-emerald-400">行业领袖型</span>';
+    body.textContent = '你的决策特质清晰指向实践价值创造。你更关注可量化的结果、更快的反馈循环和更直接的影响力路径。在当前阶段，职业实战可能比学术深造带来更高的边际收益。';
+    advice.textContent = '建议优先投入职业赛道，利用 MBA 学历的杠杆效应在未来 3-5 年内完成关键职位跃迁。当你在实践中遇到真正无法用经验解决的"元问题"时，再考虑带着具体问题回归学术——那时的你，将比现在拥有更清晰的研究方向与更强的学术动机。';
+  }
+
+  panel.classList.add('show');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
 </body>
 </html>
