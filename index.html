@@ -43,14 +43,14 @@
 
     /* Glass card */
     .glass {
-      background: rgba(10, 22, 40, .55);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(96, 165, 250, .12);
+      background: rgba(15, 33, 64, .45);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(96, 165, 250, .1);
       transition: border-color .35s, box-shadow .35s, transform .35s;
     }
     .glass:hover {
-      border-color: rgba(96, 165, 250, .35);
-      box-shadow: 0 4px 40px rgba(96, 165, 250, .08);
+      border-color: rgba(96, 165, 250, .3);
+      box-shadow: 0 8px 40px rgba(96, 165, 250, .06);
       transform: translateY(-3px);
     }
 
@@ -75,16 +75,16 @@
     .quiz-opt {
       display: flex; align-items: center; gap: .75rem;
       padding: .85rem 1.2rem; border-radius: .75rem;
-      border: 1px solid rgba(96,165,250,.12);
-      background: rgba(10,22,40,.4);
+      border: 1px solid rgba(96,165,250,.1);
+      background: rgba(15,33,64,.35);
       cursor: pointer; transition: all .25s;
     }
-    .quiz-opt:hover { border-color: rgba(96,165,250,.35); background: rgba(15,33,64,.6) }
-    .quiz-opt.selected { border-color: #60a5fa; background: rgba(96,165,250,.1) }
+    .quiz-opt:hover { border-color: rgba(96,165,250,.3); background: rgba(15,33,64,.55) }
+    .quiz-opt.selected { border-color: #60a5fa; background: rgba(96,165,250,.08) }
     .quiz-opt input { display: none }
     .quiz-dot {
       width: 18px; height: 18px; border-radius: 50%;
-      border: 2px solid rgba(96,165,250,.4);
+      border: 2px solid rgba(96,165,250,.35);
       flex-shrink: 0; position: relative; transition: border-color .25s;
     }
     .quiz-opt.selected .quiz-dot { border-color: #60a5fa }
@@ -97,26 +97,72 @@
     /* Result panel */
     .result-panel {
       max-height: 0; overflow: hidden;
-      transition: max-height .6s ease, opacity .5s ease, padding .5s ease;
+      transition: max-height .6s ease, opacity .5s ease;
       opacity: 0;
     }
-    .result-panel.show {
-      max-height: 400px; opacity: 1;
+    .result-panel.show { max-height: 400px; opacity: 1 }
+
+    /* Hero gradient background */
+    .hero-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 20%, rgba(37, 99, 235, .15) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(167, 139, 250, .1) 0%, transparent 50%),
+        radial-gradient(ellipse 90% 70% at 50% 100%, rgba(10, 22, 40, .9) 0%, transparent 60%),
+        linear-gradient(180deg, #060d1a 0%, #0a1628 40%, #0f2140 100%);
     }
 
-    /* Image overlay */
-    .img-overlay {
-      position: relative; overflow: hidden;
+    /* Hero grid pattern overlay */
+    .hero-grid {
+      background-image:
+        linear-gradient(rgba(96, 165, 250, .03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(96, 165, 250, .03) 1px, transparent 1px);
+      background-size: 60px 60px;
     }
-    .img-overlay::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(180deg, transparent 40%, rgba(10,22,40,.85));
+
+    /* Card header gradients */
+    .card-head-1 {
+      background: linear-gradient(135deg, rgba(37,99,235,.2) 0%, rgba(15,33,64,.8) 50%, rgba(10,22,40,.95) 100%);
     }
-    .img-overlay img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: transform .6s ease;
+    .card-head-2 {
+      background: linear-gradient(135deg, rgba(167,139,250,.2) 0%, rgba(15,33,64,.8) 50%, rgba(10,22,40,.95) 100%);
     }
-    .img-overlay:hover img { transform: scale(1.04) }
+    .card-head-3 {
+      background: linear-gradient(135deg, rgba(96,165,250,.2) 0%, rgba(15,33,64,.8) 50%, rgba(10,22,40,.95) 100%);
+    }
+
+    /* Abstract decorative shapes */
+    .deco-circle {
+      position: absolute; border-radius: 50%;
+      border: 1px solid rgba(96,165,250,.08);
+    }
+
+    /* Floating orb animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0) }
+      50% { transform: translateY(-12px) }
+    }
+    .float-slow { animation: float 6s ease-in-out infinite }
+    .float-mid { animation: float 4s ease-in-out infinite 1s }
+
+    /* Thin top accent bar for cards */
+    .card-accent {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(96,165,250,.4), transparent);
+    }
+    .card-accent-red {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(248,113,113,.4), transparent);
+    }
+
+    /* Subtle noise texture via SVG data URI */
+    .noise-overlay::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 0;
+      opacity: .025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 128px 128px;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body class="bg-navy-950 text-slate-50 antialiased">
@@ -135,18 +181,19 @@
 </nav>
 
 <!-- ==================== HERO ==================== -->
-<section class="relative min-h-screen flex items-end pb-20 sm:pb-28 overflow-hidden">
-  <div class="absolute inset-0 z-0">
-    <img
-      src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
-      alt="Modern office"
-      class="w-full h-full object-cover"
-    />
-    <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/80 to-navy-950/40"></div>
-  </div>
+<section class="relative min-h-screen flex items-end pb-20 sm:pb-28 overflow-hidden hero-bg noise-overlay">
+  <!-- Grid pattern -->
+  <div class="absolute inset-0 z-[1] hero-grid"></div>
+
+  <!-- Floating decorative orbs -->
+  <div class="deco-circle w-72 h-72 -top-20 -right-20 float-slow border border-accent-400/[.04] bg-accent-600/[.03]" style="position:absolute"></div>
+  <div class="deco-circle w-48 h-48 bottom-32 left-10 float-mid border border-purple-400/[.04] bg-purple-600/[.02]" style="position:absolute"></div>
+
+  <!-- Accent line -->
+  <div class="absolute top-1/3 left-0 w-full h-px z-[1]" style="background: linear-gradient(90deg, transparent, rgba(96,165,250,.06), transparent);"></div>
 
   <div class="relative z-10 max-w-4xl mx-auto px-6">
-    <div class="fade-up inline-block mb-5 px-4 py-1.5 rounded-full border border-accent-400/25 bg-accent-400/5 text-accent-400 text-xs font-sans tracking-[.2em] uppercase">
+    <div class="fade-up inline-block mb-5 px-4 py-1.5 rounded-full border border-accent-400/20 bg-accent-400/5 text-accent-400 text-xs font-sans tracking-[.2em] uppercase">
       Strategy Analysis &middot; MBA Decision Matrix
     </div>
     <h1 class="fade-up font-serif text-3xl sm:text-5xl md:text-6xl font-bold leading-tight mb-5">
@@ -162,8 +209,8 @@
 </section>
 
 <!-- ==================== 价值矩阵 ==================== -->
-<section id="value" class="py-20 sm:py-28 px-6">
-  <div class="max-w-6xl mx-auto">
+<section id="value" class="py-20 sm:py-28 px-6 relative noise-overlay">
+  <div class="max-w-6xl mx-auto relative z-10">
     <div class="text-center mb-16">
       <div class="fade-up div-line mx-auto mb-4"></div>
       <h2 class="fade-up font-serif text-2xl sm:text-3xl font-bold mb-2">维度 A：学术路径的<span class="text-accent-400">价值矩阵</span></h2>
@@ -171,36 +218,54 @@
     </div>
 
     <div class="grid md:grid-cols-3 gap-6">
+      <!-- Card 1 -->
       <div class="fade-up glass rounded-2xl overflow-hidden">
-        <div class="img-overlay h-44">
-          <img src="https://images.unsplash.com/photo-1524178232363-1fb21075726b?auto=format&fit=crop&w=600&q=80" alt="University lecture hall" />
+        <div class="card-accent"></div>
+        <div class="card-head-1 h-40 relative overflow-hidden flex items-end p-6">
+          <div class="absolute top-4 right-4 w-20 h-20 rounded-full border border-accent-400/10 bg-accent-600/5"></div>
+          <div class="absolute top-8 right-8 w-12 h-12 rounded-full border border-accent-400/15 bg-accent-600/10"></div>
+          <div class="relative z-10">
+            <div class="text-[10px] uppercase tracking-[.25em] text-accent-400/60 font-semibold mb-1">Dimension 01</div>
+            <h3 class="font-serif text-lg font-bold text-slate-50">教职准入壁垒</h3>
+          </div>
         </div>
         <div class="p-6">
-          <h3 class="font-serif text-lg font-bold mb-2 text-accent-400">教职准入壁垒</h3>
           <p class="text-slate-400 text-sm leading-relaxed">
             国内双一流高校教职已全面要求博士学位作为准入门槛。MBA 提供商业洞察，博士学历则是进入学术体系的唯一通道。缺乏这一资质，行业经验仅能支撑"客座"或"兼职"角色，无法获得正式教职的长期稳定性与学术话语权。
           </p>
         </div>
       </div>
 
+      <!-- Card 2 -->
       <div class="fade-up glass rounded-2xl overflow-hidden">
-        <div class="img-overlay h-44">
-          <img src="https://images.unsplash.com/photo-1551434678-e07b12011791?auto=format&fit=crop&w=600&q=80" alt="Boardroom strategy" />
+        <div class="card-accent"></div>
+        <div class="card-head-2 h-40 relative overflow-hidden flex items-end p-6">
+          <div class="absolute top-4 right-4 w-20 h-20 rounded-full border border-purple-400/10 bg-purple-600/5"></div>
+          <div class="absolute top-8 right-8 w-12 h-12 rounded-full border border-purple-400/15 bg-purple-600/10"></div>
+          <div class="relative z-10">
+            <div class="text-[10px] uppercase tracking-[.25em] text-purple-400/60 font-semibold mb-1">Dimension 02</div>
+            <h3 class="font-serif text-lg font-bold text-slate-50">社会资本护城河</h3>
+          </div>
         </div>
         <div class="p-6">
-          <h3 class="font-serif text-lg font-bold mb-2 text-accent-400">社会资本护城河</h3>
           <p class="text-slate-400 text-sm leading-relaxed">
             "博士"头衔在政策咨询、智库研究与企业独立董事等场景中自带信任溢价。它代表系统性研究能力与学术严谨性——这些是 MBA 学位难以单独提供的差异化竞争力。博士身份构建了一道随时间加深的社会护城河。
           </p>
         </div>
       </div>
 
+      <!-- Card 3 -->
       <div class="fade-up glass rounded-2xl overflow-hidden">
-        <div class="img-overlay h-44">
-          <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=600&q=80" alt="Research and analysis" />
+        <div class="card-accent"></div>
+        <div class="card-head-3 h-40 relative overflow-hidden flex items-end p-6">
+          <div class="absolute top-4 right-4 w-20 h-20 rounded-full border border-blue-400/10 bg-blue-600/5"></div>
+          <div class="absolute top-8 right-8 w-12 h-12 rounded-full border border-blue-400/15 bg-blue-600/10"></div>
+          <div class="relative z-10">
+            <div class="text-[10px] uppercase tracking-[.25em] text-blue-400/60 font-semibold mb-1">Dimension 03</div>
+            <h3 class="font-serif text-lg font-bold text-slate-50">思维范式迁移</h3>
+          </div>
         </div>
         <div class="p-6">
-          <h3 class="font-serif text-lg font-bold mb-2 text-accent-400">思维范式迁移</h3>
           <p class="text-slate-400 text-sm leading-relaxed">
             MBA 的核心训练是"如何执行"，博士的核心训练是"为何如此"。从经验驱动转向理论驱动，意味着你不再只是问题的解决者，而是问题的定义者——这种认知范式的迁移，是从管理者到思想领袖的质变。
           </p>
@@ -211,8 +276,8 @@
 </section>
 
 <!-- ==================== 机会成本 ==================== -->
-<section id="cost" class="py-20 sm:py-28 px-6 bg-navy-900/40">
-  <div class="max-w-6xl mx-auto">
+<section id="cost" class="py-20 sm:py-28 px-6 relative noise-overlay" style="background: linear-gradient(180deg, rgba(10,22,40,.3) 0%, rgba(6,13,26,.6) 100%);">
+  <div class="max-w-6xl mx-auto relative z-10">
     <div class="text-center mb-16">
       <div class="fade-up div-line mx-auto mb-4"></div>
       <h2 class="fade-up font-serif text-2xl sm:text-3xl font-bold mb-2">维度 B：学术路径的<span class="text-red-400">机会成本</span></h2>
@@ -220,46 +285,55 @@
     </div>
 
     <div class="grid md:grid-cols-3 gap-6">
-      <div class="fade-up glass rounded-2xl p-8">
-        <div class="text-xs uppercase tracking-widest text-red-400/60 mb-3 font-semibold">风险因子 01</div>
-        <h3 class="font-serif text-lg font-bold mb-3 text-red-400">职业窗口期折损</h3>
-        <p class="text-slate-400 text-sm leading-relaxed">
-          MBA 毕业后的 3-5 年是职业复利的加速期。选择读博意味着在 4-5 年内暂停薪资增长与职场晋升轨道。当同龄人完成从经理到总监的跃迁时，你的资产积累曲线将出现结构性断点。
-        </p>
+      <div class="fade-up glass rounded-2xl overflow-hidden">
+        <div class="card-accent-red"></div>
+        <div class="p-8">
+          <div class="text-[10px] uppercase tracking-[.25em] text-red-400/50 font-semibold mb-3">Risk Factor 01</div>
+          <h3 class="font-serif text-lg font-bold mb-3 text-red-400">职业窗口期折损</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            MBA 毕业后的 3-5 年是职业复利的加速期。选择读博意味着在 4-5 年内暂停薪资增长与职场晋升轨道。当同龄人完成从经理到总监的跃迁时，你的资产积累曲线将出现结构性断点。
+          </p>
+        </div>
       </div>
 
-      <div class="fade-up glass rounded-2xl p-8">
-        <div class="text-xs uppercase tracking-widest text-red-400/60 mb-3 font-semibold">风险因子 02</div>
-        <h3 class="font-serif text-lg font-bold mb-3 text-red-400">科研周期的心理成本</h3>
-        <p class="text-slate-400 text-sm leading-relaxed">
-          博士研究是一场长期孤独修行。与 MBA 课堂的高频互动不同，科研的本质是个体与问题的持续对峙。从选题到发表，每个环节都要求极高耐性。心理落差是导致博士辍学的核心因素之一，需要在决策前充分评估。
-        </p>
+      <div class="fade-up glass rounded-2xl overflow-hidden">
+        <div class="card-accent-red"></div>
+        <div class="p-8">
+          <div class="text-[10px] uppercase tracking-[.25em] text-red-400/50 font-semibold mb-3">Risk Factor 02</div>
+          <h3 class="font-serif text-lg font-bold mb-3 text-red-400">科研周期的心理成本</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            博士研究是一场长期孤独修行。与 MBA 课堂的高频互动不同，科研的本质是个体与问题的持续对峙。从选题到发表，每个环节都要求极高耐性。心理落差是导致博士辍学的核心因素之一，需要在决策前充分评估。
+          </p>
+        </div>
       </div>
 
-      <div class="fade-up glass rounded-2xl p-8">
-        <div class="text-xs uppercase tracking-widest text-red-400/60 mb-3 font-semibold">风险因子 03</div>
-        <h3 class="font-serif text-lg font-bold mb-3 text-red-400">行业脱钩风险</h3>
-        <p class="text-slate-400 text-sm leading-relaxed">
-          学术周期与商业周期存在结构性错配。在沉浸于理论模型与期刊审稿的数年中，外部商业环境正以指数速度迭代。AI 重塑、新商业模式涌现——"学术闭关"可能导致曾经敏锐的商业嗅觉出现不可逆的钝化。
-        </p>
+      <div class="fade-up glass rounded-2xl overflow-hidden">
+        <div class="card-accent-red"></div>
+        <div class="p-8">
+          <div class="text-[10px] uppercase tracking-[.25em] text-red-400/50 font-semibold mb-3">Risk Factor 03</div>
+          <h3 class="font-serif text-lg font-bold mb-3 text-red-400">行业脱钩风险</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            学术周期与商业周期存在结构性错配。在沉浸于理论模型与期刊审稿的数年中，外部商业环境正以指数速度迭代。AI 重塑、新商业模式涌现——"学术闭关"可能导致曾经敏锐的商业嗅觉出现不可逆的钝化。
+          </p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ==================== 路径对比 ==================== -->
-<section id="compare" class="py-20 sm:py-28 px-6">
-  <div class="max-w-4xl mx-auto">
+<section id="compare" class="py-20 sm:py-28 px-6 relative noise-overlay">
+  <div class="max-w-4xl mx-auto relative z-10">
     <div class="text-center mb-16">
       <div class="fade-up div-line mx-auto mb-4"></div>
       <h2 class="fade-up font-serif text-2xl sm:text-3xl font-bold mb-2">路径对比：<span class="text-purple-400">DBA vs Ph.D</span></h2>
       <p class="fade-up text-slate-400 text-sm max-w-lg mx-auto">关键不在于哪条路更好，而在于哪条路与你的战略目标对齐。</p>
     </div>
 
-    <div class="fade-up overflow-hidden rounded-2xl border border-accent-400/10">
+    <div class="fade-up overflow-hidden rounded-2xl border border-accent-400/10 bg-navy-900/40 backdrop-blur-sm">
       <table class="w-full text-sm sm:text-base">
         <thead>
-          <tr class="bg-navy-900/80">
+          <tr class="bg-navy-900/60">
             <th class="p-4 sm:p-5 text-left text-slate-400 font-sans font-semibold text-xs uppercase tracking-wider">评估维度</th>
             <th class="p-4 sm:p-5 text-center text-accent-400 font-sans font-semibold">DBA</th>
             <th class="p-4 sm:p-5 text-center text-purple-400 font-sans font-semibold">Ph.D</th>
@@ -308,8 +382,8 @@
 </section>
 
 <!-- ==================== 决策倾向自测 ==================== -->
-<section id="quiz" class="py-20 sm:py-28 px-6 bg-navy-900/40">
-  <div class="max-w-3xl mx-auto">
+<section id="quiz" class="py-20 sm:py-28 px-6 relative noise-overlay" style="background: linear-gradient(180deg, rgba(10,22,40,.3) 0%, rgba(6,13,26,.6) 100%);">
+  <div class="max-w-3xl mx-auto relative z-10">
     <div class="text-center mb-14">
       <div class="fade-up div-line mx-auto mb-4"></div>
       <h2 class="fade-up font-serif text-2xl sm:text-3xl font-bold mb-2">决策倾向<span class="text-accent-400">自测</span></h2>
@@ -319,21 +393,21 @@
     <!-- Q1 -->
     <div class="fade-up mb-10">
       <h3 class="font-serif text-base sm:text-lg font-bold mb-4 flex gap-3">
-        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-accent-600/20 text-accent-400 text-xs font-bold flex-shrink-0">1</span>
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-accent-600/15 text-accent-400 text-xs font-bold flex-shrink-0">1</span>
         <span>你是否愿意在未来 4-6 年内，接受收入大幅降低甚至归零的状态？</span>
       </h3>
       <div class="space-y-3 ml-10">
-        <label class="quiz-opt" data-q="q1" data-v="academic" onclick="selectOpt(this)">
+        <label class="quiz-opt" onclick="selectOpt(this)">
           <input type="radio" name="q1" value="academic" />
           <div class="quiz-dot"></div>
           <span class="text-slate-300 text-sm">愿意。我已有财务规划，可以接受短期牺牲换取长期跃迁。</span>
         </label>
-        <label class="quiz-opt" data-q="q1" data-v="practice" onclick="selectOpt(this)">
+        <label class="quiz-opt" onclick="selectOpt(this)">
           <input type="radio" name="q1" value="practice" />
           <div class="quiz-dot"></div>
           <span class="text-slate-300 text-sm">不愿意。我需要在未来几年内维持或提升收入水平。</span>
         </label>
-        <label class="quiz-opt" data-q="q1" data-v="neutral" onclick="selectOpt(this)">
+        <label class="quiz-opt" onclick="selectOpt(this)">
           <input type="radio" name="q1" value="neutral" />
           <div class="quiz-dot"></div>
           <span class="text-slate-300 text-sm">取决于具体项目。在职博士或高奖学金项目我可以接受。</span>
@@ -344,21 +418,21 @@
     <!-- Q2 -->
     <div class="fade-up mb-10">
       <h3 class="font-serif text-base sm:text-lg font-bold mb-4 flex gap-3">
-        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-accent-600/20 text-accent-400 text-xs font-bold flex-shrink-0">2</span>
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-accent-600/15 text-accent-400 text-xs font-bold flex-shrink-0">2</span>
         <span>当你面对一个复杂商业问题时，你的第一反应更接近以下哪种？</span>
       </h3>
       <div class="space-y-3 ml-10">
-        <label class="quiz-opt" data-q="q2" data-v="academic" onclick="selectOpt(this)">
+        <label class="quiz-opt" onclick="selectOpt(this)">
           <input type="radio" name="q2" value="academic" />
           <div class="quiz-dot"></div>
           <span class="text-slate-300 text-sm">追问"为什么"——我希望理解底层逻辑，甚至构建理论模型来解释它。</span>
         </label>
-        <label class="quiz-opt" data-q="q2" data-v="practice" onclick="selectOpt(this)">
+        <label class="quiz-opt" onclick="selectOpt(this)">
           <input type="radio" name="q2" value="practice" />
           <div class="quiz-dot"></div>
           <span class="text-slate-300 text-sm">思考"怎么做"——我更关注如何快速落地解决方案、拿到结果。</span>
         </label>
-        <label class="quiz-opt" data-q="q2" data-v="neutral" onclick="selectOpt(this)">
+        <label class="quiz-opt" onclick="selectOpt(this)">
           <input type="radio" name="q2" value="neutral" />
           <div class="quiz-dot"></div>
           <span class="text-slate-300 text-sm">两者兼有。我既想理解本质，也不想脱离实际应用场景。</span>
@@ -369,21 +443,21 @@
     <!-- Q3 -->
     <div class="fade-up mb-12">
       <h3 class="font-serif text-base sm:text-lg font-bold mb-4 flex gap-3">
-        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-accent-600/20 text-accent-400 text-xs font-bold flex-shrink-0">3</span>
+        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-accent-600/15 text-accent-400 text-xs font-bold flex-shrink-0">3</span>
         <span>五年后，你更希望自己的身份标签是什么？</span>
       </h3>
       <div class="space-y-3 ml-10">
-        <label class="quiz-opt" data-q="q3" data-v="academic" onclick="selectOpt(this)">
+        <label class="quiz-opt" onclick="selectOpt(this)">
           <input type="radio" name="q3" value="academic" />
           <div class="quiz-dot"></div>
           <span class="text-slate-300 text-sm">学者 / 教授 / 研究员——在学术领域建立个人影响力。</span>
         </label>
-        <label class="quiz-opt" data-q="q3" data-v="practice" onclick="selectOpt(this)">
+        <label class="quiz-opt" onclick="selectOpt(this)">
           <input type="radio" name="q3" value="practice" />
           <div class="quiz-dot"></div>
           <span class="text-slate-300 text-sm">企业高管 / 创业者 / 行业领袖——在商业世界创造可量化的价值。</span>
         </label>
-        <label class="quiz-opt" data-q="q3" data-v="neutral" onclick="selectOpt(this)">
+        <label class="quiz-opt" onclick="selectOpt(this)">
           <input type="radio" name="q3" value="neutral" />
           <div class="quiz-dot"></div>
           <span class="text-slate-300 text-sm">跨界角色——既参与学术研究，也保持商业实践，做理论与实践的桥梁。</span>
@@ -400,7 +474,7 @@
     </div>
 
     <!-- Result -->
-    <div id="quizResult" class="result-panel mt-10 rounded-2xl border border-accent-400/15 bg-navy-900/60 p-8 sm:p-10">
+    <div id="quizResult" class="result-panel mt-10 rounded-2xl border border-accent-400/15 bg-navy-900/50 backdrop-blur-sm p-8 sm:p-10">
       <div id="resultIcon" class="text-4xl mb-4"></div>
       <h3 id="resultTitle" class="font-serif text-xl sm:text-2xl font-bold mb-4"></h3>
       <p id="resultBody" class="text-slate-300 leading-relaxed text-sm"></p>
@@ -418,25 +492,20 @@
 
 <!-- ==================== SCRIPTS ==================== -->
 <script>
-// ---- Scroll fade ----
+// Scroll fade
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
 }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
 document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 
-// ---- Quiz logic ----
+// Quiz
 const answers = {};
-
 function selectOpt(el) {
   const name = el.querySelector('input').name;
   const val = el.querySelector('input').value;
-
-  // Clear siblings
   el.closest('.space-y-3').querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   answers[name] = val;
-
-  // Enable button when all answered
   const btn = document.getElementById('quizSubmit');
   const hint = document.getElementById('quizHint');
   if (Object.keys(answers).length === 3) {
@@ -449,34 +518,28 @@ function selectOpt(el) {
 
 function calcResult() {
   let score = 0;
-  Object.values(answers).forEach(v => {
-    if (v === 'academic') score += 2;
-    else if (v === 'neutral') score += 1;
-  });
-
+  Object.values(answers).forEach(v => { if (v === 'academic') score += 2; else if (v === 'neutral') score += 1; });
   const panel = document.getElementById('quizResult');
   const icon = document.getElementById('resultIcon');
   const title = document.getElementById('resultTitle');
   const body = document.getElementById('resultBody');
   const advice = document.getElementById('resultAdvice');
-
   if (score >= 5) {
     icon.textContent = '🎓';
     title.innerHTML = '<span class="text-accent-400">学术潜力股</span>';
-    body.textContent = '你的决策特质显示，你更倾向于在理论边界探索。你愿意为长期价值承受短期成本，对"为什么"的追问欲超越了即时回报的诱惑。这种认知模式与学术研究的核心要求高度匹配。';
+    body.textContent = '你的决策特质显示，你更倾向于在理论边界探索。你愿意为长期价值承受短期成本，对“为什么”的追问欲超越了即时回报的诱惑。这种认知模式与学术研究的核心要求高度匹配。';
     advice.textContent = '建议优先考虑 Ph.D 路径，聚焦你已明确的研究方向。如果尚未锁定具体课题，可先以 Research Assistant 身份进入学术环境试水，验证研究兴趣后再做最终决策。';
   } else if (score >= 3) {
     icon.textContent = '⚖️';
     title.innerHTML = '<span class="text-purple-400">混合型决策者</span>';
-    body.textContent = '你的决策模式兼具学术好奇心与实践导向。你既想理解问题的本质，又不愿完全脱离商业场景。这种"跨界"特质在管理学科中极为宝贵——你可能是 DBA 路径的最佳候选人。';
+    body.textContent = '你的决策模式兼具学术好奇心与实践导向。你既想理解问题的本质，又不愿完全脱离商业场景。这种“跨界”特质在管理学科中极为宝贵——你可能是 DBA 路径的最佳候选人。';
     advice.textContent = '建议优先考虑 DBA（工商管理博士）项目。它允许你在保持职业轨道的同时完成学术升级。选择那些与企业实践深度绑定的研究课题，让你的工作经验成为学术产出的燃料。';
   } else {
     icon.textContent = '📈';
     title.innerHTML = '<span class="text-emerald-400">行业领袖型</span>';
     body.textContent = '你的决策特质清晰指向实践价值创造。你更关注可量化的结果、更快的反馈循环和更直接的影响力路径。在当前阶段，职业实战可能比学术深造带来更高的边际收益。';
-    advice.textContent = '建议优先投入职业赛道，利用 MBA 学历的杠杆效应在未来 3-5 年内完成关键职位跃迁。当你在实践中遇到真正无法用经验解决的"元问题"时，再考虑带着具体问题回归学术——那时的你，将比现在拥有更清晰的研究方向与更强的学术动机。';
+    advice.textContent = '建议优先投入职业赛道，利用 MBA 学历的杠杆效应在未来 3-5 年内完成关键职位跃迁。当你在实践中遇到真正无法用经验解决的“元问题”时，再考虑带着具体问题回归学术——那时的你，将比现在拥有更清晰的研究方向与更强的学术动机。';
   }
-
   panel.classList.add('show');
   panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
